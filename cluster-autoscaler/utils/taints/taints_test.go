@@ -509,7 +509,7 @@ func TestSanitizeTaints(t *testing.T) {
 					Effect: apiv1.TaintEffectNoSchedule,
 				},
 				{
-					Key:    DefaultStatusTaintPrefix + "some-taint",
+					Key:    StatusTaintPrefix + "some-taint",
 					Value:  "myValue",
 					Effect: apiv1.TaintEffectNoSchedule,
 				},
@@ -555,7 +555,7 @@ func TestSanitizeTaints(t *testing.T) {
 		},
 	}
 	taintConfig := TaintConfig{
-		IgnoredTaints: map[string]bool{"ignore-me": true},
+		StartupTaints: map[string]bool{"ignore-me": true},
 		StatusTaints:  map[string]bool{"status-me": true},
 	}
 
