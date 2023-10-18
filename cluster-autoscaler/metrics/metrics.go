@@ -141,7 +141,7 @@ var (
 			Namespace: caNamespace,
 			Name:      "unschedulable_pods_count",
 			Help:      "Number of unschedulable pods in the cluster.",
-		}, []string{"count_type"}, 
+		}, []string{"count_type"},
 	)
 
 	maxNodesCount = k8smetrics.NewGauge(
