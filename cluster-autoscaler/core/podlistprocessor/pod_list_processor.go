@@ -32,7 +32,6 @@ type defaultPodListProcessor struct {
 func NewDefaultPodListProcessor(predicateChecker predicatechecker.PredicateChecker) *defaultPodListProcessor {
 	return &defaultPodListProcessor{
 		processors: []pods.PodListProcessor{
-			NewClearTPURequestPodListProcessor(),
 			NewFilterOutExpandablePodListProcessor(),
 			NewCurrentlyDrainedNodesPodListProcessor(),
 			NewFilterOutSchedulablePodListProcessor(predicateChecker),
