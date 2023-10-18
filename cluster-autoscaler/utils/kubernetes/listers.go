@@ -166,7 +166,7 @@ func UnknownPods(allPods []*apiv1.Pod) []*apiv1.Pod {
 		}
 		// Make sure it's not unschedulable
 		_, condition := podv1.GetPodCondition(&pod.Status, apiv1.PodScheduled)
-		if condition == nil || (condition.Status == apiv1.ConditionFalse && condition.Reason != apiv1.PodReasonUnschedulable) {
+		if condition == nil || (condition.Status == apiv1.ConditionFalse && condition.Reason == "") {
 			unknownPods = append(unknownPods, pod)
 		}
 	}
