@@ -455,21 +455,6 @@ func (a *StaticAutoscaler) RunOnce(currentTime time.Time) caerrors.AutoscalerErr
 
 	unschedulablePods = tpu.ClearTPURequests(unschedulablePods)
 
-	// todo: move split and append below to separate PodListProcessor
-	// Some unschedulable pods can be waiting for lower priority pods preemption so they have nominated node to run.
-	// Such pods don't require scale up but should be considered during scale down.
-	unschedulablePods, unschedulableWaitingForLowerPriorityPreemption := core_utils.FilterOutExpendableAndSplit(unschedulablePods, allNodes, a.ExpendablePodsPriorityCutoff)
-
-	// modify the snapshot simulating scheduling of pods waiting for preemption.
-	// this is not strictly correct as we are not simulating preemption itself but it matches
-	// CA logic from before migration to scheduler framework. So let's keep it for now
-	for _, p := range unschedulableWaitingForLowerPriorityPreemption {
-		if err := a.ClusterSnapshot.AddPod(p, p.Status.NominatedNodeName); err != nil {
-			klog.Errorf("Failed to update snapshot with pod %s waiting for preemption", err)
-			return caerrors.ToAutoscalerError(caerrors.InternalError, err)
-		}
-	}
-
 	// Upcoming nodes are recently created nodes that haven't registered in the cluster yet, or haven't become ready yet.
 	upcomingCounts, registeredUpcoming := a.clusterStateRegistry.GetUpcomingNodes()
 	// For each upcoming node we inject a placeholder node faked to appear ready into the cluster snapshot, so that we can pack unschedulable pods on
